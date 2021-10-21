@@ -1,58 +1,77 @@
 version: "3"
 services:
-  hub:
-    image: selenium/hub:3.141
+  selenium-hub:
+    image: selenium/hub
     ports:
       - "4444:4444"
+
   chrome:
-    image: selenium/node-chrome:3.141
+    image: selenium/node-chrome
+    shm_size: '2gb'
     depends_on:
-      - "hub"
+      - "selenium-hub"
     environment:
-      - HUB_HOST=hub
-  ff:
-    image: selenium/node-firefox:3.141
-    shm_size: '1gb'
+      BROWSER: chrome
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+    links:
+      - selenium-hub
+
+  firefox:
+    image: selenium/node-firefox
+    shm_size: '2gb'
     depends_on:
-      - "hub"
+      - selenium-hub
     environment:
-      - HUB_HOST=hub
-  search-module-ff:
-    image: nitinmanojkumar/selenium-docker
+      BROWSER: firefox
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443   
+    links:
+      - selenium-hub
+      
+  search-module:
+    image: nitinmanojkumar/selenium-grid
     depends_on:
       - chrome
-      - ff
-    environment:
-      - BROWSER=firefox
-      - HUB_HOST=hub
-      - MODULE=search-module.xml
-    volumes:
-      - ./output-from-container-firefox:/usr/share/udemy/test-output
-  search-module-chrome:
-    image: nitinmanojkumar/selenium-docker
-    depends_on:
-      - chrome
-      - ff
+      - firefox
     environment:
       - BROWSER=chrome
-      - HUB_HOST=hub
+      - SE_EVENT_BUS_HOST=selenium-hub
       - MODULE=search-module.xml
     volumes:
-      - ./output-from-container-chrome:/usr/share/udemy/test-output
-# version: "3"
-# services:
-#   hub:
-#     image: dosel/zalenium
-#     logging:
-#       driver: "none"
-#     ports:
-#       - "4444:4444"
-#       - "5555:5555"
-#     volumes:
-#       - /var/run/docker.sock:/var/run/docker.sock
-#       - /usr/bin/docker:/usr/bin/docker
-#     command: >
-#       start --desiredContainers 2 
-#             --maxDockerSeleniumContainers 2 
-#             --maxTestSessions 3 
-#             --videoRecordingEnabled false
+      - C:/Users/nitin/docker/test-results/chrome:/usr/udemy/test-output
+      
+  book-flight-module:
+    image: nitinmanojkumar/selenium-grid
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - BROWSER=firefox
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - MODULE=book-flight-module.xml
+    volumes:
+      - C:/Users/nitin/docker/test-results/firefox:/usr/udemy/test-output
+    
+      
+  # chrome_video:
+    # image: selenium/video:ffmpeg-4.3.1-20211013
+    # volumes:
+      # - C:/Users/nitin/docker:/videos
+    # depends_on:
+      # - chrome
+    # environment:
+      # - DISPLAY_CONTAINER_NAME=chrome
+      # - FILE_NAME=chrome_video.mp4
+    
+  # firefox_video:
+    # image: selenium/video:ffmpeg-4.3.1-20211013
+    # volumes:
+      # - C:/Users/nitin/docker:/videos
+    # depends_on:
+      # - firefox
+    # environment:
+      # - DISPLAY_CONTAINER_NAME=firefox
+      # - FILE_NAME=firefox_video.mp4
