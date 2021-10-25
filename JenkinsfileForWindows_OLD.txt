@@ -3,14 +3,14 @@ pipeline {
     stages {
         stage('Build Jar') {
             steps {
-                bat "cd C://selenium-docker-master && mvn clean package -DskipTests"
+                bat "cd C://Eclipse_Projects//selenium-docker && mvn clean package -DskipTests"
             }
             
         }
                 
         stage('Build Image') {
             steps {
-                bat "cd C://selenium-docker-master && docker build -t=nitinmanojkumar/selenium-docker ."
+                bat "cd C://Eclipse_Projects//selenium-docker && docker build -t=nitinmanojkumar/selenium-docker ."
             }
             
         }

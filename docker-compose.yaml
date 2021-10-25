@@ -53,7 +53,7 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - MODULE=book-flight-module.xml
     volumes:
-      - ./output:/usr/udemy/test-output
+      - ./output/firefox:/usr/udemy/test-output
     
       
   # chrome_video:
