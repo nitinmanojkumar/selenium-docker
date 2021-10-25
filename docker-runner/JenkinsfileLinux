@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Pull latest image') {
+            steps{
+				sh "docker pull nitinmanojkumar/selenium-docker:latest"
+			}
+        }
+        stage('Start the grid using compose file') {
+            steps {
+                sh "docker-compose up -d selenium-hub chrome firefox"
+            }
+        }
+		stage('Start the execution using compose file') {
+            steps {
+                sh "docker-compose up search-module book-flight-module"
+            }
+        }
+    }
+	post{
+		always{
+			archiveArtifacts artifacts: 'output/**'
+			sh "docker-compose down"
+		}
+	}
+}
