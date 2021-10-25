@@ -1,0 +1,77 @@
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome
+    shm_size: '2gb'
+    depends_on:
+      - "selenium-hub"
+    environment:
+      BROWSER: chrome
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443
+    links:
+      - selenium-hub
+
+  firefox:
+    image: selenium/node-firefox
+    shm_size: '2gb'
+    depends_on:
+      - selenium-hub
+    environment:
+      BROWSER: firefox
+      SE_EVENT_BUS_HOST: selenium-hub
+      SE_EVENT_BUS_PUBLISH_PORT: 4442
+      SE_EVENT_BUS_SUBSCRIBE_PORT: 4443   
+    links:
+      - selenium-hub
+      
+  search-module:
+    image: nitinmanojkumar/selenium-grid
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - BROWSER=chrome
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - MODULE=search-module.xml
+    volumes:
+      - C:/Users/nitin/docker/test-results/chrome:/usr/udemy/test-output
+      
+  book-flight-module:
+    image: nitinmanojkumar/selenium-grid
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - BROWSER=firefox
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - MODULE=book-flight-module.xml
+    volumes:
+      - C:/Users/nitin/docker/test-results/firefox:/usr/udemy/test-output
+    
+      
+  # chrome_video:
+    # image: selenium/video:ffmpeg-4.3.1-20211013
+    # volumes:
+      # - C:/Users/nitin/docker:/videos
+    # depends_on:
+      # - chrome
+    # environment:
+      # - DISPLAY_CONTAINER_NAME=chrome
+      # - FILE_NAME=chrome_video.mp4
+    
+  # firefox_video:
+    # image: selenium/video:ffmpeg-4.3.1-20211013
+    # volumes:
+      # - C:/Users/nitin/docker:/videos
+    # depends_on:
+      # - firefox
+    # environment:
+      # - DISPLAY_CONTAINER_NAME=firefox
+      # - FILE_NAME=firefox_video.mp4
