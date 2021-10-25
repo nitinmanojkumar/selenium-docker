@@ -41,7 +41,7 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - MODULE=search-module.xml
     volumes:
-      - C:/Users/nitin/docker/test-results/chrome:/usr/udemy/test-output
+      - ./output/chrome:/usr/udemy/test-output
       
   book-flight-module:
     image: nitinmanojkumar/selenium-grid
@@ -53,7 +53,7 @@ services:
       - SE_EVENT_BUS_HOST=selenium-hub
       - MODULE=book-flight-module.xml
     volumes:
-      - C:/Users/nitin/docker/test-results/firefox:/usr/udemy/test-output
+      - ./output:/usr/udemy/test-output
     
       
   # chrome_video:
