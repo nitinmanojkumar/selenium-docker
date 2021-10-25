@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
     stages {
         stage('Pull latest image') {
             steps{
@@ -11,7 +11,7 @@ pipeline {
                 bat "docker-compose up -d selenium-hub chrome firefox"
             }
         }
-		stage('Start the grid using compose file') {
+		stage('Start the execution using compose file') {
             steps {
                 bat "docker-compose up search-module book-flight-module"
             }
