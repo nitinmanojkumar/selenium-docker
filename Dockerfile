@@ -17,7 +17,7 @@ ADD testng-xmls/search-module.xml					search-module.xml
 
 # ADD health check script
 ADD healthcheck/healthcheck.sh                      healthcheck.sh
-RUN dos2unix healthcheck/healthcheck.sh
+RUN dos2unix healthcheck.sh
 
 # BROWSER
 # HUB_HOST
