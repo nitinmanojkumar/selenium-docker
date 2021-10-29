@@ -16,8 +16,8 @@ ADD ../testng-xmls/book-flight-module.xml				book-flight-module.xml
 ADD ../testng-xmls/search-module.xml					search-module.xml
 
 # ADD health check script
-ADD ../healthcheck.sh                      healthcheck.sh
-RUN dos2unix ../healthcheck.sh
+ADD ../healthcheck/healthcheck.sh                      healthcheck.sh
+RUN dos2unix ../healthcheck/healthcheck.sh
 
 # BROWSER
 # HUB_HOST
