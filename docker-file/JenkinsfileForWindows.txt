@@ -10,7 +10,7 @@ pipeline {
                 
         stage('Build Image') {
             steps {
-                bat "docker build -t=nitinmanojkumar/selenium-docker ."
+                bat "docker build -t=nitinmanojkumar/selenium-docker healthcheck/."
             }
             
         }
